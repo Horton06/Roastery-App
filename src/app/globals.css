@@ -3,19 +3,77 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background-light: #ffffff;
+  --background-dark: #0a0a0a;
+  --foreground-light: #171717;
+  --foreground-dark: #ededed;
+  --primary-light: #ff7f00; /* Orange color for title and tabs */
+  --primary-dark: #ff7f00; /* Orange color for title and tabs */
+  --secondary-light: #d1d5db;
+  --secondary-dark: #374151;
+  --tab-border: #ff7f00; /* Orange color for tab borders */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: var(--background-dark);
+    --foreground: var(--foreground-dark);
+    --primary: var(--primary-dark);
+    --secondary: var(--secondary-dark);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: var(--background-light);
+    --foreground: var(--foreground-light);
+    --primary: var(--primary-light);
+    --secondary: var(--secondary-light);
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+.container {
+  padding: 1rem;
+  background-color: var(--background);
+  border: 1px solid var(--secondary);
+  border-radius: 0.5rem;
+}
+
+h1 {
+  color: var(--primary);
+}
+
+button {
+  background-color: var(--primary);
+  color: var(--foreground);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--secondary);
+}
+
+.tabs-trigger {
+  border: 1px solid var(--tab-border); /* Orange border for tabs */
+  color: black; /* Black text for readability */
+}
+
+.tabs-trigger.bg-gray-200 {
+  background-color: var(--primary); /* Orange background for active tab */
+  color: black; /* Black text for readability */
+}
+
+input, select {
+  color: var(--foreground);
+  background-color: var(--background);
+  border: 1px solid var(--secondary);
 }

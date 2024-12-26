@@ -1,23 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
-import { BlendManagement } from "@/components/BlendManagement";
-import { CoffeeDatabase } from "@/components/CoffeeDatabase";
-import { OrderEntry } from "@/components/OrderEntry";
-import { RoastingRequirements } from "@/components/RoastingRequirements";
-import { CoffeeProvider } from "@/context/CoffeeContext";
-import { Toaster } from "react-hot-toast";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/Tabs";
+import { CoffeeProvider } from '../context/CoffeeContext';
+import { CoffeeDatabase } from '../components/CoffeeDatabase';
+import { BlendManagement } from '../components/BlendManagement';
+import { OrderEntry } from '../components/OrderEntry';
+import { RoastingRequirements } from '../components/RoastingRequirements';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/Tabs';
 
-// App.tsx - Main Application Component
 export default function App() {
   const [activeTab, setActiveTab] = useState("orders");
 
   return (
     <CoffeeProvider>
-      <Toaster />
-      <div className="container mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-8">
+      <div className="container mx-auto p-4 bg-background border border-secondary rounded">
+        <h1 className="text-3xl font-bold mb-8 text-primary">
           Coffee Roasting Production Management
         </h1>
 
@@ -35,15 +32,15 @@ export default function App() {
               <RoastingRequirements />
             </div>
           </TabsContent>
-          
+
           <TabsContent value="coffee" activeTab={activeTab}>
             <CoffeeDatabase />
           </TabsContent>
-          
+
           <TabsContent value="blends" activeTab={activeTab}>
             <BlendManagement />
           </TabsContent>
-          
+
           <TabsContent value="roasting" activeTab={activeTab}>
             <RoastingRequirements />
           </TabsContent>

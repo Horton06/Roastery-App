@@ -24,11 +24,11 @@ export default function App() {
         <Tabs defaultValue="orders" className="space-y-4">
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="orders">Orders</TabsTrigger>
-            <TabsTrigger value="coffee">Coffee Database</TabsTrigger>
-            <TabsTrigger value="blends">Blend Management</TabsTrigger>
             <TabsTrigger value="inventory">Inventory</TabsTrigger>
             <TabsTrigger value="roasting">Roasting Requirements</TabsTrigger>
             <TabsTrigger value="bagging">Bagging Requirements</TabsTrigger>
+            <TabsTrigger value="coffee">Coffee Database</TabsTrigger>
+            <TabsTrigger value="blends">Blend Management</TabsTrigger>
           </TabsList>
 
           <TabsContent value="orders">

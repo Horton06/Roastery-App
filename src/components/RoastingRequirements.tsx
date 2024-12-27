@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useCoffee } from '../context/CoffeeContext';
 import { calculateTotalPoundsNeeded, calculateBatchesNeeded } from '../utils/calculations';
+
 export function RoastingRequirements() {
   const { state, dispatch } = useCoffee();
 
@@ -25,6 +26,12 @@ export function RoastingRequirements() {
 
     dispatch({ type: 'UPDATE_REQUIREMENTS', requirements });
   }, [state.orders, state.coffees, state.blends, dispatch]);
+
+  // Calculate total batches needed
+  const totalBatches = state.roastingRequirements.reduce((sum, req) => sum + req.batchesNeeded, 0);
+  const estimatedRoastingTimeMinutes = totalBatches * 19; // 19 minutes per batch
+  const estimatedRoastingTimeHours = Math.floor(estimatedRoastingTimeMinutes / 60);
+  const estimatedRoastingTimeRemainingMinutes = estimatedRoastingTimeMinutes % 60;
 
   return (
     <div className="p-4 border rounded-lg">
@@ -54,6 +61,12 @@ export function RoastingRequirements() {
             </div>
           );
         })}
+      </div>
+      <div className="flex justify-between items-center border-t pt-2 mt-4">
+        <span>Estimated Roasting Time</span>
+        <span className="font-medium">
+          {estimatedRoastingTimeHours} hours {estimatedRoastingTimeRemainingMinutes} minutes
+        </span>
       </div>
     </div>
   );

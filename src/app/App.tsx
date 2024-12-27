@@ -1,16 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { CoffeeProvider } from '../context/CoffeeContext';
 import { CoffeeDatabase } from '../components/CoffeeDatabase';
 import { BlendManagement } from '../components/BlendManagement';
 import { OrderEntry } from '../components/OrderEntry';
 import { RoastingRequirements } from '../components/RoastingRequirements';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/Tabs';
+import { BaggingRequirements } from '../components/BaggingRequirements';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("orders");
-
   return (
     <CoffeeProvider>
       <div className="container mx-auto p-4 bg-background border border-secondary rounded">
@@ -18,31 +17,36 @@ export default function App() {
           Coffee Roasting Production Management
         </h1>
 
-        <Tabs defaultValue="orders" className="space-y-4" activeTab={activeTab} setActiveTab={setActiveTab}>
-          <TabsList>
-            <TabsTrigger value="orders" activeTab={activeTab} setActiveTab={setActiveTab}>Orders</TabsTrigger>
-            <TabsTrigger value="coffee" activeTab={activeTab} setActiveTab={setActiveTab}>Coffee Database</TabsTrigger>
-            <TabsTrigger value="blends" activeTab={activeTab} setActiveTab={setActiveTab}>Blend Management</TabsTrigger>
-            <TabsTrigger value="roasting" activeTab={activeTab} setActiveTab={setActiveTab}>Roasting Requirements</TabsTrigger>
+        <Tabs defaultValue="orders" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="coffee">Coffee Database</TabsTrigger>
+            <TabsTrigger value="blends">Blend Management</TabsTrigger>
+            <TabsTrigger value="roasting">Roasting Requirements</TabsTrigger>
+            <TabsTrigger value="bagging">Bagging Requirements</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="orders" activeTab={activeTab}>
+          <TabsContent value="orders">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <OrderEntry />
               <RoastingRequirements />
             </div>
           </TabsContent>
 
-          <TabsContent value="coffee" activeTab={activeTab}>
+          <TabsContent value="coffee">
             <CoffeeDatabase />
           </TabsContent>
 
-          <TabsContent value="blends" activeTab={activeTab}>
+          <TabsContent value="blends">
             <BlendManagement />
           </TabsContent>
 
-          <TabsContent value="roasting" activeTab={activeTab}>
+          <TabsContent value="roasting">
             <RoastingRequirements />
+          </TabsContent>
+
+          <TabsContent value="bagging">
+            <BaggingRequirements />
           </TabsContent>
         </Tabs>
       </div>

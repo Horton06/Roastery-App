@@ -1,6 +1,6 @@
 import { Coffee, BlendRecipe, Order } from '../types';
 const WEIGHT_LOSS_FACTOR = 0.15;
-const BUFFER_FACTOR = 0.12;
+const BUFFER_FACTOR = 0.08;
 const HUNDRED_GRAMS_TO_POUNDS = 0.22;
 export function calculateTotalPoundsNeeded(
   coffee: Coffee,

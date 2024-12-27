@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { Coffee, BlendRecipe, Order, RoastingRequirement } from '../types';
 
 interface CoffeeState {
@@ -18,7 +18,11 @@ type CoffeeAction =
   | { type: 'UPDATE_BLEND'; blend: BlendRecipe }
   | { type: 'DELETE_BLEND'; id: string }
   | { type: 'ADD_ORDER'; order: Order }
-  | { type: 'UPDATE_REQUIREMENTS'; requirements: RoastingRequirement[] };
+  | { type: 'UPDATE_REQUIREMENTS'; requirements: RoastingRequirement[] }
+  | { type: 'CLEAR_ORDERS' }
+  | { type: 'CLEAR_ROASTING_REQUIREMENTS' }
+  | { type: 'CLEAR_BAGGING_REQUIREMENTS' }
+  | { type: 'LOAD_STATE'; state: CoffeeState };
 
 const initialState: CoffeeState = {
   coffees: [],
@@ -27,43 +31,91 @@ const initialState: CoffeeState = {
   roastingRequirements: [],
 };
 
+// Load state from localStorage
+const loadState = (): CoffeeState => {
+  if (typeof window === 'undefined') return initialState;
+  try {
+    const savedState = localStorage.getItem('coffeeState');
+    if (savedState) {
+      return JSON.parse(savedState);
+    }
+  } catch (error) {
+    console.error('Error loading state:', error);
+  }
+  return initialState;
+};
+
+// Save state to localStorage
+const saveState = (state: CoffeeState) => {
+  try {
+    localStorage.setItem('coffeeState', JSON.stringify(state));
+  } catch (error) {
+    console.error('Error saving state:', error);
+  }
+};
+
 function coffeeReducer(state: CoffeeState, action: CoffeeAction): CoffeeState {
+  let newState: CoffeeState;
+
   switch (action.type) {
+    case 'LOAD_STATE':
+      return action.state;
     case 'ADD_COFFEE':
-      return { ...state, coffees: [...state.coffees, action.coffee] };
+      newState = { ...state, coffees: [...state.coffees, action.coffee] };
+      break;
     case 'UPDATE_COFFEE':
-      return {
+      newState = {
         ...state,
         coffees: state.coffees.map((c) =>
           c.id === action.coffee.id ? action.coffee : c
         ),
       };
+      break;
     case 'DELETE_COFFEE':
-      return {
+      newState = {
         ...state,
         coffees: state.coffees.filter((c) => c.id !== action.id),
       };
+      break;
     case 'ADD_BLEND':
-      return { ...state, blends: [...state.blends, action.blend] };
+      newState = { ...state, blends: [...state.blends, action.blend] };
+      break;
     case 'UPDATE_BLEND':
-      return {
+      newState = {
         ...state,
         blends: state.blends.map((b) =>
           b.id === action.blend.id ? action.blend : b
         ),
       };
+      break;
     case 'DELETE_BLEND':
-      return {
+      newState = {
         ...state,
         blends: state.blends.filter((b) => b.id !== action.id),
       };
+      break;
     case 'ADD_ORDER':
-      return { ...state, orders: [...state.orders, action.order] };
+      newState = { ...state, orders: [...state.orders, action.order] };
+      break;
     case 'UPDATE_REQUIREMENTS':
-      return { ...state, roastingRequirements: action.requirements };
+      newState = { ...state, roastingRequirements: action.requirements };
+      break;
+    case 'CLEAR_ORDERS':
+      newState = { ...state, orders: [] };
+      break;
+    case 'CLEAR_ROASTING_REQUIREMENTS':
+      newState = { ...state, roastingRequirements: [] };
+      break;
+    case 'CLEAR_BAGGING_REQUIREMENTS':
+      newState = { ...state, roastingRequirements: [] };
+      break;
     default:
       return state;
   }
+
+  // Save state after each change
+  saveState(newState);
+  return newState;
 }
 
 const CoffeeContext = createContext<{
@@ -72,7 +124,15 @@ const CoffeeContext = createContext<{
 } | null>(null);
 
 export function CoffeeProvider({ children }: { children: React.ReactNode }) {
+  // Initialize with data from localStorage
   const [state, dispatch] = useReducer(coffeeReducer, initialState);
+
+  // Load saved state on initial mount
+  useEffect(() => {
+    const savedState = loadState();
+    dispatch({ type: 'LOAD_STATE', state: savedState });
+  }, []);
+
   return (
     <CoffeeContext.Provider value={{ state, dispatch }}>
       {children}

@@ -32,6 +32,22 @@ export function OrderEntry() {
     }
   };
 
+  const handleClearAll = () => {
+    dispatch({ type: 'CLEAR_ORDERS' });
+    dispatch({ type: 'CLEAR_ROASTING_REQUIREMENTS' });
+    dispatch({ type: 'CLEAR_BAGGING_REQUIREMENTS' });
+    // Reset inventory for all coffees
+    state.coffees.forEach(coffee => {
+      dispatch({
+        type: 'UPDATE_COFFEE',
+        coffee: {
+          ...coffee,
+          roastedInventory: 0
+        }
+      });
+    });
+  };
+
   return (
     <div className="p-4 border rounded-lg">
       <h2 className="text-xl font-bold mb-4">Order Entry</h2>
@@ -60,7 +76,7 @@ export function OrderEntry() {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-500">
               Retail Bags
             </label>
             <input
@@ -76,7 +92,7 @@ export function OrderEntry() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-500">
               5lb Bags
             </label>
             <input
@@ -92,7 +108,7 @@ export function OrderEntry() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-500">
               2lb Bags
             </label>
             <input
@@ -108,7 +124,7 @@ export function OrderEntry() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-500">
               100g Bags
             </label>
             <input
@@ -132,6 +148,12 @@ export function OrderEntry() {
           Add Order
         </button>
       </div>
+      <button
+        className="w-full p-2 bg-red-500 text-white rounded mt-4"
+        onClick={handleClearAll}
+      >
+        Clear All
+      </button>
     </div>
   );
 }

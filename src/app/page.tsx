@@ -39,7 +39,7 @@ export default function Page() {
           </div>
           <div className="flex items-center gap-4">
             <span>{auth.userEmail}</span>
-            <Button variant="outline" onClick={logout}>Sign Out</Button>
+            <Button onClick={logout}>Sign Out</Button>
           </div>
         </div>
 

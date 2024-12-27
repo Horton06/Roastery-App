@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { useCoffee } from '../context/CoffeeContext';
+import { Coffee } from '../types';
 
 export function CoffeeDatabase() {
   const { state, dispatch } = useCoffee();
-  const [newCoffee, setNewCoffee] = React.useState({
+  const [newCoffee, setNewCoffee] = React.useState<Omit<Coffee, 'id'>>({
     name: '',
     retailSize: 283,
     batchSize: 13.5,

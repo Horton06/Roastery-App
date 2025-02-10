@@ -1,9 +1,9 @@
 'use client';
 
-import { useAuth } from '@/context/AuthContext';
-import { LoginForm } from '@/components/LoginForm';
+import { AuthContext, useAuth } from '../context/AuthContext'; // Adjust the path accordingly
+import { LoginForm } from '../components/LoginForm'; // Adjust the path accordingly
+import { Button } from '../components/ui/button'; // Adjust the path accordingly
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CoffeeProvider } from '@/context/CoffeeContext';
 import { OrderEntry } from '@/components/OrderEntry';

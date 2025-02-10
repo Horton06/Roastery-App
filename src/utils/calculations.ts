@@ -39,7 +39,7 @@ export function calculateTotalPoundsNeeded(
   // Account for weight loss and safety buffer
   totalPounds = totalPounds * (1 + WEIGHT_LOSS_FACTOR + BUFFER_FACTOR);
 
-  // Subtract existing inventory
+  // Subtract existing roasted inventory
   totalPounds = Math.max(0, totalPounds - coffee.roastedInventory);
 
   return totalPounds;

@@ -13,14 +13,13 @@ export function CoffeeDatabase() {
     batchSize: 13.5,
     roastedInventory: 0,
     isBlendOnly: false,
-    isSingleOrigin: true,
   });
 
   const handleAddCoffee = async () => {
     if (newCoffee.name) {
       const coffee: Coffee = {
-        id: crypto.randomUUID(),
         ...newCoffee,
+        id: crypto.randomUUID(),
       };
       await dispatch({ type: 'ADD_COFFEE', coffee });
       setNewCoffee({
@@ -30,7 +29,6 @@ export function CoffeeDatabase() {
         batchSize: 13.5,
         roastedInventory: 0,
         isBlendOnly: false,
-        isSingleOrigin: true,
       });
     }
   };

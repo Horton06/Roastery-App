@@ -1,35 +1,64 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useCoffee } from '../context/CoffeeContext';
+
+interface Order {
+  id: string;
+  coffeeId: string;
+  retailQuantity: number;
+  fivePoundQuantity: number;
+  twoPoundQuantity: number;
+  hundredGramQuantity: number;
+}
 
 export function OrderEntry() {
   const { state, dispatch } = useCoffee();
-  const [newOrder, setNewOrder] = React.useState({
+  const [newOrder, setNewOrder] = useState({
+    id: '',
     coffeeId: '',
     retailQuantity: 0,
     fivePoundQuantity: 0,
     twoPoundQuantity: 0,
     hundredGramQuantity: 0,
   });
+  const [isEditing, setIsEditing] = useState(false);
 
-  const handleAddOrder = () => {
+  const handleAddOrUpdateOrder = () => {
     if (newOrder.coffeeId) {
-      dispatch({
-        type: 'ADD_ORDER',
-        order: {
-          id: crypto.randomUUID(),
-          ...newOrder,
-        },
-      });
+      if (isEditing) {
+        dispatch({
+          type: 'UPDATE_ORDER',
+          order: newOrder,
+        });
+      } else {
+        dispatch({
+          type: 'ADD_ORDER',
+          order: {
+            ...newOrder,
+            id: crypto.randomUUID(),
+          },
+        });
+      }
       setNewOrder({
+        id: '',
         coffeeId: '',
         retailQuantity: 0,
         fivePoundQuantity: 0,
         twoPoundQuantity: 0,
         hundredGramQuantity: 0,
       });
+      setIsEditing(false);
     }
+  };
+
+  const handleEditOrder = (order: Order): void => {
+    setNewOrder(order);
+    setIsEditing(true);
+  };
+
+  const handleDeleteOrder = (orderId: string): void => {
+    dispatch({ type: 'DELETE_ORDER', id: orderId });
   };
 
   const handleClearAll = () => {
@@ -37,13 +66,13 @@ export function OrderEntry() {
     dispatch({ type: 'CLEAR_ROASTING_REQUIREMENTS' });
     dispatch({ type: 'CLEAR_BAGGING_REQUIREMENTS' });
     // Reset inventory for all coffees
-    state.coffees.forEach(coffee => {
+    state.coffees.forEach((coffee) => {
       dispatch({
         type: 'UPDATE_COFFEE',
         coffee: {
           ...coffee,
-          roastedInventory: 0
-        }
+          roastedInventory: 0,
+        },
       });
     });
   };
@@ -143,9 +172,9 @@ export function OrderEntry() {
 
         <button
           className="w-full p-2 bg-blue-500 text-white rounded"
-          onClick={handleAddOrder}
+          onClick={handleAddOrUpdateOrder}
         >
-          Add Order
+          {isEditing ? 'Update Order' : 'Add Order'}
         </button>
       </div>
       <button
@@ -154,6 +183,42 @@ export function OrderEntry() {
       >
         Clear All
       </button>
+
+      <div className="mt-8">
+        <h3 className="text-lg font-semibold mb-4">Current Orders</h3>
+        <div className="space-y-2">
+          {state.orders.map((order) => (
+            <div
+              key={order.id}
+              className="p-4 border rounded flex justify-between items-center"
+            >
+              <div>
+                <h4 className="font-medium">
+                  {state.coffees.find((c) => c.id === order.coffeeId)?.name ||
+                    state.blends.find((b) => b.id === order.coffeeId)?.name}
+                </h4>
+                <p className="text-sm text-gray-500">
+                  Retail: {order.retailQuantity} | 5lb: {order.fivePoundQuantity} | 2lb: {order.twoPoundQuantity} | 100g: {order.hundredGramQuantity}
+                </p>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  className="px-3 py-1 bg-yellow-500 text-white rounded"
+                  onClick={() => handleEditOrder(order)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="px-3 py-1 bg-red-500 text-white rounded"
+                  onClick={() => handleDeleteOrder(order.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

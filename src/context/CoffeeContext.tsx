@@ -18,6 +18,8 @@ type CoffeeAction =
   | { type: 'UPDATE_BLEND'; blend: BlendRecipe }
   | { type: 'DELETE_BLEND'; id: string }
   | { type: 'ADD_ORDER'; order: Order }
+  | { type: 'UPDATE_ORDER'; order: Order }
+  | { type: 'DELETE_ORDER'; id: string }
   | { type: 'UPDATE_REQUIREMENTS'; requirements: RoastingRequirement[] }
   | { type: 'CLEAR_ORDERS' }
   | { type: 'CLEAR_ROASTING_REQUIREMENTS' }
@@ -96,6 +98,20 @@ function coffeeReducer(state: CoffeeState, action: CoffeeAction): CoffeeState {
       break;
     case 'ADD_ORDER':
       newState = { ...state, orders: [...state.orders, action.order] };
+      break;
+    case 'UPDATE_ORDER':
+      newState = {
+        ...state,
+        orders: state.orders.map((order) =>
+          order.id === action.order.id ? action.order : order
+        ),
+      };
+      break;
+    case 'DELETE_ORDER':
+      newState = {
+        ...state,
+        orders: state.orders.filter((order) => order.id !== action.id),
+      };
       break;
     case 'UPDATE_REQUIREMENTS':
       newState = { ...state, roastingRequirements: action.requirements };

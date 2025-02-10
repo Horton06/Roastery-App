@@ -20,7 +20,7 @@ const initialState: CoffeeState = {
   coffees: [],
   blends: [],
   orders: [],
-  roastingRequirements: roastingRequirements || []
+  roastingRequirements: []
 };
 
 type CoffeeAction =

@@ -1,10 +1,10 @@
 export interface Coffee {
   id: string;
   name: string;
-  origin: string;
-  roastLevel: 'light' | 'medium' | 'dark';
-  pricePerKg: number;
-  stockAmount: number;
+  retailSize: number;
+  batchSize: number;
+  roastedInventory: number;
+  isBlendOnly: boolean;
 }
 
 export interface BlendRecipe {

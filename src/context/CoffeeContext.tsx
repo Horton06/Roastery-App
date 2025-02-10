@@ -1,7 +1,7 @@
 'use client';
-
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { Coffee, BlendRecipe, Order, RoastingRequirement } from '../types';
+import { Coffee, Order, RoastingRequirement, BlendRecipe } from '../types';
+import { supabase } from '@/lib/supabase-client';
 
 interface CoffeeState {
   coffees: Coffee[];
